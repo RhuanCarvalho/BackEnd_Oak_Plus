@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Generation {
+  id                   Int      @id @default(autoincrement())
+  id_generation        Int
+  total_dias_treinados Int
+  total_populacao      Int
+  genomas              Genoma[]
+
+  @@map("generations")
+}
+
+model Genoma {
+  id                     Int        @id @default(autoincrement())
+  fitness                Float
+  resultado_total_valor  Float
+  total_trades_gain      Int
+  total_trades_loss      Int
+  total_trades           Int
+  media_porcent_desejada Float
+  media_porcent_atingida Float
+  total_dias_training    Int
+  trainings              Training[]
+
+  generation    Generation @relation(fields: [id_generation], references: [id])
+  id_generation Int
+
+  @@map("genomas")
+}
+
+model Training {
+  id                     Int            @id @default(autoincrement())
+  resultado_diario_valor Float
+  total_trades_gain      Int
+  total_trades_loss      Int
+  total_trades           Int
+  porcent_trades_gain    Float
+  porcent_trades_loss    Float
+  history_trades         HistoryTrade[]
+
+  genoma    Genoma @relation(fields: [id_genoma], references: [id])
+  id_genoma Int
+
+  dia    Dia @relation(fields: [id_dia], references: [id])
+  id_dia Int
+
+  @@map("trainings")
+}
+
+model Dia {
+  id        Int        @id @default(autoincrement())
+  dia       DateTime
+  trainings Training[]
+  candles   Candle[]
+  trainingsTest TrainingOfTest[]
+
+  @@map("dias")
+}
+
+model Candle {
+  id    Int      @id @default(autoincrement())
+  date  DateTime
+  open  Float
+  high  Float
+  low   Float
+  close Float
+
+  dia    Dia @relation(fields: [id_dia], references: [id])
+  id_dia Int
+
+  @@map("candles")
+}
+
+model HistoryTrade {
+  id                 Int      @id @default(autoincrement())
+  tipo_trade         String
+  data_trade_entrada DateTime
+  data_trade_saida   DateTime
+  trade_entrada      Float
+  trade_saida        Float
+  stop               Float
+  gain               Float
+  resultado_valor    Float
+  resultado_pontos   Float
+  trainings          Training @relation(fields: [id_training], references: [id])
+  id_training        Int
+
+  @@map("history_trades")
+}
+
+model TrainingOfTest {
+  id                     Int            @id @default(autoincrement())
+  resultado_diario_valor Float
+  total_trades_gain      Int
+  total_trades_loss      Int
+  total_trades           Int
+  porcent_trades_gain    Float
+  porcent_trades_loss    Float
+  history_trades         HistoryTradeOfTest[]
+
+  dia    Dia @relation(fields: [id_dia], references: [id])
+  id_dia Int
+
+  @@map("trainingsoftests")
+}
+
+model HistoryTradeOfTest {
+  id                 Int      @id @default(autoincrement())
+  tipo_trade         String
+  data_trade_entrada DateTime
+  data_trade_saida   DateTime
+  trade_entrada      Float
+  trade_saida        Float
+  stop               Float
+  gain               Float
+  resultado_valor    Float
+  resultado_pontos   Float
+  trainings          TrainingOfTest @relation(fields: [id_training], references: [id])
+  id_training        Int
+
+  @@map("history_tradesoftests")
+}
