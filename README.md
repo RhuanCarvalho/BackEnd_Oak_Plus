@@ -8,7 +8,7 @@
     -- npm i
     -- npm install --global yarn
 
-# Rodar cmd para criar as TABELAS e o BANCO DE DADOSGT
+# Rodar cmd para criar as TABELAS e o BANCO DE DADOS
 
     -- npx prisma migrate dev --name init
 
