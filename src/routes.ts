@@ -21,6 +21,7 @@ import { ControllerShowHistoryTradesOfTest } from './controllers/ControllerShowH
 import { ControllerShowGraphTradeOfTest } from './controllers/ControllerShowGraphTradeOfTest';
 import { ControllerShowGraphEvulotionMoneyInDay } from './controllers/ControllerShowGraphEvulotionMoneyInDay';
 import { ControllerShowGraphEvulotionMoneyInDayOfTest } from './controllers/ControllerShowGraphEvulotionMoneyInDayOfTest'
+import { ControllerShowGenoma } from "./controllers/ControllerShowGenoma";
 
 
 const router = Router();
@@ -37,6 +38,7 @@ const controllerCreateHistoryTradeOfTest = new ControllerCreateHistoryTradeOfTes
 
 const controllerShowGenerations = new ControllerShowGenerations();
 const controllerShowGenomas = new ControllerShowGenomas();
+const controllerShowGenoma= new ControllerShowGenoma();
 const controllerShowTrainings = new ControllerShowTrainings();
 const controllerShowGraphProcentDays = new ControllerShowGraphProcentDays();
 const controllerShowGraphDrawdown = new ControllerShowGraphDrawdown();
@@ -65,6 +67,7 @@ router.post("/trainingoftest", controllerCreateTrainingOfTest.create);
 
 router.get("/getGenerations", controllerShowGenerations.showAll);
 router.get("/getGenomas/:id", controllerShowGenomas.showAll);
+router.get("/getGenoma/:id", controllerShowGenoma.showAll);
 router.get("/getTrainings/:id", controllerShowTrainings.showAll);
 router.get("/getGraphShowGenoma/:id", controllerShowGraphProcentDays.showAll);
 router.get("/getGraphShowDrawdown/:id", controllerShowGraphDrawdown.showAll);
