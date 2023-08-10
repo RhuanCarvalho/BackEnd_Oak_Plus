@@ -7,123 +7,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Generation {
-  id                   Int      @id @default(autoincrement())
-  id_generation        Int
-  total_dias_treinados Int
-  total_populacao      Int
-  genomas              Genoma[]
-
-  @@map("generations")
+model Train {
+  id            Int       @id @default(autoincrement())
+  ativo         String
+  timeframe     Int
+  data_train    DateTime
+  trades_train  Trade[]
 }
 
-model Genoma {
-  id                     Int        @id @default(autoincrement())
-  fitness                Float
-  resultado_total_valor  Float
-  total_trades_gain      Int
-  total_trades_loss      Int
-  total_trades           Int
-  media_porcent_desejada Float
-  media_porcent_atingida Float
-  total_dias_training    Int
-  trainings              Training[]
-
-  generation    Generation @relation(fields: [id_generation], references: [id])
-  id_generation Int
-
-  @@map("genomas")
+model Trade {
+  id                 Int       @id @default(autoincrement())
+  data_trade         DateTime
+  trade_certo        Int
+  trade_previsto     Int
+  possiveis_trades   PossiveisTrade[]
+  key_train          Int
+  train              Train     @relation(fields: [key_train], references: [id])
 }
 
-model Training {
-  id                     Int            @id @default(autoincrement())
-  resultado_diario_valor Float
-  total_trades_gain      Int
-  total_trades_loss      Int
-  total_trades           Int
-  porcent_trades_gain    Float
-  porcent_trades_loss    Float
-  history_trades         HistoryTrade[]
-
-  genoma    Genoma @relation(fields: [id_genoma], references: [id])
-  id_genoma Int
-
-  dia    Dia @relation(fields: [id_dia], references: [id])
-  id_dia Int
-
-  @@map("trainings")
-}
-
-model Dia {
-  id        Int        @id @default(autoincrement())
-  dia       DateTime
-  trainings Training[]
-  candles   Candle[]
-  trainingsTest TrainingOfTest[]
-
-  @@map("dias")
+model PossiveisTrade {
+  id                Int        @id @default(autoincrement())
+  id_type_trade     Int
+  time_abertura     DateTime
+  time_saida        DateTime
+  preco_abertura    Float
+  preco_saida       Float
+  preco_alvo        Float
+  preco_stop        Float
+  risco_max_pts     Float
+  risco_max_valor   Float
+  retorno_max_pts   Float
+  retorno_max_valor Float
+  resultado_pts     Float
+  resultado_valor   Float
+  tempo_operacao    String
+  resultado         String
+  alvo_atingido     Boolean
+  stop_atingido     Boolean
+  key_trades_train  Int
+  trade             Trade     @relation(fields: [key_trades_train], references: [id])
 }
 
 model Candle {
-  id    Int      @id @default(autoincrement())
-  date  DateTime
-  open  Float
-  high  Float
-  low   Float
-  close Float
-
-  dia    Dia @relation(fields: [id_dia], references: [id])
-  id_dia Int
-
-  @@map("candles")
-}
-
-model HistoryTrade {
-  id                 Int      @id @default(autoincrement())
-  tipo_trade         String
-  data_trade_entrada DateTime
-  data_trade_saida   DateTime
-  trade_entrada      Float
-  trade_saida        Float
-  stop               Float
-  gain               Float
-  resultado_valor    Float
-  resultado_pontos   Float
-  trainings          Training @relation(fields: [id_training], references: [id])
-  id_training        Int
-
-  @@map("history_trades")
-}
-
-model TrainingOfTest {
-  id                     Int            @id @default(autoincrement())
-  resultado_diario_valor Float
-  total_trades_gain      Int
-  total_trades_loss      Int
-  total_trades           Int
-  porcent_trades_gain    Float
-  porcent_trades_loss    Float
-  history_trades         HistoryTradeOfTest[]
-
-  dia    Dia @relation(fields: [id_dia], references: [id])
-  id_dia Int
-
-  @@map("trainingsoftests")
-}
-
-model HistoryTradeOfTest {
-  id                 Int      @id @default(autoincrement())
-  tipo_trade         String
-  data_trade_entrada DateTime
-  data_trade_saida   DateTime
-  trade_entrada      Float
-  trade_saida        Float
-  stop               Float
-  gain               Float
-  resultado_valor    Float
-  resultado_pontos   Float
-  trainings          TrainingOfTest @relation(fields: [id_training], references: [id])
-  id_training        Int
-
-  @@map("history_tradesoftests")
+  id        Int      @id @default(autoincrement())
+  timeframe Int
+  ativo     String
+  date      DateTime
+  open      Float
+  high      Float
+  low       Float
+  close     Float
+  media9E   Float
+  media20A  Float
+  media200A Float
+  vwap      Float
+  stochd    Float
+  stochk    Float
 }
