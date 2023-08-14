@@ -22,11 +22,12 @@ model Trade {
   trade_previsto     Int
   possiveis_trades   PossiveisTrade[]
   key_train          Int
-  train              Train     @relation(fields: [key_train], references: [id])
+  train              Train     @relation(fields: [key_train], references: [id], onDelete: Cascade)
 }
 
 model PossiveisTrade {
   id                Int        @id @default(autoincrement())
+  nome              String
   id_type_trade     Int
   time_abertura     DateTime
   time_saida        DateTime
@@ -45,7 +46,7 @@ model PossiveisTrade {
   alvo_atingido     Boolean
   stop_atingido     Boolean
   key_trades_train  Int
-  trade             Trade     @relation(fields: [key_trades_train], references: [id])
+  trade             Trade     @relation(fields: [key_trades_train], references: [id], onDelete: Cascade)
 }
 
 model Candle {
